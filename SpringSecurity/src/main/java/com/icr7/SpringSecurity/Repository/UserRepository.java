@@ -1,6 +1,6 @@
 package com.icr7.SpringSecurity.Repository;
 
-import com.icr7.SpringSecurity.Model.UserTable;
+import com.icr7.model.UserTable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

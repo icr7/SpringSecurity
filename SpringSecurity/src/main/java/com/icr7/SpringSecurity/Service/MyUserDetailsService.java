@@ -1,8 +1,8 @@
 package com.icr7.SpringSecurity.Service;
 
 import com.icr7.SpringSecurity.Model.MyUserDetail;
-import com.icr7.SpringSecurity.Model.UserTable;
 import com.icr7.SpringSecurity.Repository.UserRepository;
+import com.icr7.model.UserTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
