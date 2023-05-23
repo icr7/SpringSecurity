@@ -9,10 +9,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/jwt")
@@ -37,4 +36,13 @@ public class JwtController {
         UserDetails userDetail = userDetailsService.loadUserByUsername(user.getUserName());
         return jwtUtil.generateToken(userDetail);
     }
+
+    @GetMapping("/validate")
+    public String validateToken(HttpServletRequest httpServletRequest){
+        String token=httpServletRequest.getHeader("jwt");
+        String username=jwtUtil.extractUsername(token);
+        UserDetails userDetail = userDetailsService.loadUserByUsername(username);
+        return "Is "+username+" valid user : "+jwtUtil.validateToken(token,userDetail);
+    }
+
 }
