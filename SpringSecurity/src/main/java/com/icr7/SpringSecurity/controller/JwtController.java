@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 @RestController
 @RequestMapping("/jwt")
@@ -39,10 +40,11 @@ public class JwtController {
 
     @GetMapping("/validate")
     public String validateToken(HttpServletRequest httpServletRequest){
-        String token=httpServletRequest.getHeader("jwt");
+        String token=httpServletRequest.getHeader("authorization").substring(7);
         String username=jwtUtil.extractUsername(token);
         UserDetails userDetail = userDetailsService.loadUserByUsername(username);
         return "Is "+username+" valid user : "+jwtUtil.validateToken(token,userDetail);
     }
+    
 
 }
