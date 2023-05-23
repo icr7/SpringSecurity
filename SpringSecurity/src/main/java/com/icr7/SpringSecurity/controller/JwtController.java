@@ -45,6 +45,6 @@ public class JwtController {
         UserDetails userDetail = userDetailsService.loadUserByUsername(username);
         return "Is "+username+" valid user : "+jwtUtil.validateToken(token,userDetail);
     }
-    
+
 
 }

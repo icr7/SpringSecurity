@@ -1,5 +1,6 @@
 package com.icr7.SpringSecurity.config;
 
+import com.icr7.SpringSecurity.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,9 +8,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -17,8 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public UserDetailsService myUserDetailService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Autowired
+    public JwtRequestFilter jwtRequestFilter;
+
+
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailService);
     }
 
@@ -29,9 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/controller/user").hasAnyAuthority("USER","ADMIN")
                 .antMatchers("/**").permitAll()
                 .and()
-                .csrf().disable()
-                .headers().frameOptions().disable()
-                .and().formLogin();
+                .csrf().disable().headers().frameOptions().disable()// for enabling of http://localhost:8080/h2-console
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        ;
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

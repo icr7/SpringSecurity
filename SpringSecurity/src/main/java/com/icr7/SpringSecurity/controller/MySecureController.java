@@ -27,7 +27,6 @@ public class MySecureController {
 
     public String getLoginUserName(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return username;
+        return authentication.getName();
     }
 }
